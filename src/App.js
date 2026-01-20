@@ -67,7 +67,7 @@ function App() {
     } else {
       setBuyAmount('');
     }
-  }, [sellAmount, sellToken, buyToken]);
+  }, [sellAmount, sellToken, buyToken, exchangeRates]);
 
   const handleAllowConnection = () => {
     setIsConnecting(true);
