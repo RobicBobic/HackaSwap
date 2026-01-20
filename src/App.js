@@ -2,6 +2,30 @@ import React, { useState, useEffect } from 'react';
 import { Wallet, ChevronDown, ArrowUpDown, Github, Twitter, Zap, Database, CheckCircle, Sparkles, TrendingUp } from 'lucide-react';
 import './App.css';
 
+// Move exchangeRates outside component to prevent re-creation on every render
+const EXCHANGE_RATES = {
+  'SOL-USDC': 102.50,
+  'USDC-SOL': 0.00976,
+  'SOL-USDT': 102.30,
+  'USDT-SOL': 0.00978,
+  'SOL-RAY': 68.5,
+  'RAY-SOL': 0.0146,
+  'USDC-USDT': 0.9998,
+  'USDT-USDC': 1.0002,
+  'SOL-BONK': 15000000,
+  'BONK-SOL': 0.00000007,
+  'USDC-BONK': 146341,
+  'BONK-USDC': 0.00000683,
+};
+
+const BALANCES = {
+  SOL: 2.5,
+  USDC: 150.75,
+  USDT: 200.00,
+  RAY: 45.20,
+  BONK: 1000000
+};
+
 function App() {
   const [sellAmount, setSellAmount] = useState('');
   const [buyAmount, setBuyAmount] = useState('');
@@ -17,29 +41,6 @@ function App() {
   const [showSuccess, setShowSuccess] = useState(false);
   const [walletAddress, setWalletAddress] = useState('');
   const [particles, setParticles] = useState([]);
-
-  const balances = {
-    SOL: 2.5,
-    USDC: 150.75,
-    USDT: 200.00,
-    RAY: 45.20,
-    BONK: 1000000
-  };
-
-  const exchangeRates = {
-    'SOL-USDC': 102.50,
-    'USDC-SOL': 0.00976,
-    'SOL-USDT': 102.30,
-    'USDT-SOL': 0.00978,
-    'SOL-RAY': 68.5,
-    'RAY-SOL': 0.0146,
-    'USDC-USDT': 0.9998,
-    'USDT-USDC': 1.0002,
-    'SOL-BONK': 15000000,
-    'BONK-SOL': 0.00000007,
-    'USDC-BONK': 146341,
-    'BONK-USDC': 0.00000683,
-  };
 
   useEffect(() => {
     setMounted(true);
@@ -61,13 +62,13 @@ function App() {
 
   useEffect(() => {
     if (sellAmount && parseFloat(sellAmount) > 0) {
-      const rate = exchangeRates[`${sellToken}-${buyToken}`] || 1;
+      const rate = EXCHANGE_RATES[`${sellToken}-${buyToken}`] || 1;
       const result = (parseFloat(sellAmount) * rate).toFixed(6);
       setBuyAmount(result);
     } else {
       setBuyAmount('');
     }
-  }, [sellAmount, sellToken, buyToken, exchangeRates]);
+  }, [sellAmount, sellToken, buyToken]);
 
   const handleAllowConnection = () => {
     setIsConnecting(true);
@@ -122,7 +123,7 @@ function App() {
   };
 
   const setMaxAmount = () => {
-    const balance = balances[sellToken] || 0;
+    const balance = BALANCES[sellToken] || 0;
     const maxAmount = sellToken === 'SOL' ? Math.max(0, balance - 0.01) : balance;
     setSellAmount(maxAmount.toString());
   };
@@ -271,7 +272,7 @@ function App() {
               <div className="token-section">
                 <label className="token-label">
                   <span>Sell</span>
-                  <span className="label-balance">Balance: {balances[sellToken].toFixed(4)}</span>
+                  <span className="label-balance">Balance: {BALANCES[sellToken].toFixed(4)}</span>
                 </label>
                 <div className="token-input-container">
                   <div className="token-input-row">
@@ -305,7 +306,7 @@ function App() {
               <div className="token-section">
                 <label className="token-label">
                   <span>Buy</span>
-                  <span className="label-balance">Balance: {balances[buyToken].toFixed(4)}</span>
+                  <span className="label-balance">Balance: {BALANCES[buyToken].toFixed(4)}</span>
                 </label>
                 <div className="token-input-container">
                   <div className="token-input-row">
