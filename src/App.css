@@ -435,7 +435,6 @@
   border-radius: 50%;
   position: relative;
   z-index: 2;
-  animation: logoFloat 3s ease-in-out infinite;
 }
 
 .logo-glow {
@@ -447,11 +446,6 @@
   opacity: 0.5;
   z-index: 1;
   animation: pulse 2s ease-in-out infinite;
-}
-
-@keyframes logoFloat {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-5px) rotate(5deg); }
 }
 
 .site-title {
@@ -608,12 +602,6 @@
 
 .title-icon {
   color: var(--primary);
-  animation: bounce 2s ease-in-out infinite;
-}
-
-@keyframes bounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
 }
 
 .swap-subtitle {

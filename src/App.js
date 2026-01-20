@@ -234,7 +234,7 @@ function App() {
           </div>
 
           <div className="nav-section">
-            <NavButton icon={<Twitter size={20} />} label="X" url="https://twitter.com" />
+            <NavButton icon={<Twitter size={20} />} label="X" url="https://x.com/HackaSwap" />
             <NavButton icon={<Github size={20} />} label="GitHub" url="https://github.com" />
             <NavButton icon={<Zap size={20} />} label="Pump.Fun" url="https://pump.fun" />
             <NavButton icon={<Database size={20} />} label="API" url="https://jup.ag/api" />
