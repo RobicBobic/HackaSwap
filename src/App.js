@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Wallet, ChevronDown, ArrowUpDown, Github, Twitter, Zap, Database, CheckCircle, Sparkles, TrendingUp } from 'lucide-react';
+import { Wallet, ChevronDown, ArrowUpDown, Github, Twitter, Zap, Database, CheckCircle, Sparkles, TrendingUp, Lock } from 'lucide-react';
 import './App.css';
 
 // Move exchangeRates outside component to prevent re-creation on every render
@@ -135,12 +135,12 @@ function App() {
           <div className="welcome-glow"></div>
           <div className="welcome-content">
             <div className="welcome-logo-container">
-              <img src="/logo.png" alt="Hacka Swap" className="welcome-logo" />
+              <img src="/logo.png" alt="Hackaton Swap" className="welcome-logo" />
               <div className="logo-ring"></div>
               <div className="logo-ring-2"></div>
             </div>
             <h1 className="welcome-title">
-              <span className="title-word">HACKA</span>
+              <span className="title-word">HACKATON</span>
               <span className="title-word">SWAP</span>
             </h1>
             <div className="hexagon-container">
@@ -209,11 +209,11 @@ function App() {
         <header className="header">
           <div className="logo-section">
             <div className="logo-wrapper">
-              <img src="/logo.png" alt="Hacka Swap Logo" className="pill-logo-img" />
+              <img src="/logo.png" alt="Hackaton Swap Logo" className="pill-logo-img" />
               <div className="logo-glow"></div>
             </div>
             <h1 className="site-title">
-              HACKA <span className="title-swap">SWAP</span>
+              HACKATON <span className="title-swap">SWAP</span>
             </h1>
           </div>
 
@@ -251,6 +251,27 @@ function App() {
             <div className="swap-container">
               <div className="container-glow"></div>
               
+              {/* WALLET NOT CONNECTED OVERLAY - BIG AND CLEAR! */}
+              {!isWalletConnected && (
+                <div className="wallet-connect-overlay">
+                  <div className="overlay-blur"></div>
+                  <div className="overlay-content">
+                    <div className="overlay-icon-container">
+                      <Lock size={56} className="overlay-lock-icon" />
+                      <Wallet size={40} className="overlay-wallet-icon" />
+                    </div>
+                    <h3 className="overlay-title">Connect Wallet First</h3>
+                    <p className="overlay-subtitle">You need to connect your wallet before you can swap tokens</p>
+                    <button onClick={handleConnectWallet} className="overlay-connect-button">
+                      <Wallet size={20} />
+                      <span>Connect Wallet Now</span>
+                      <Sparkles size={18} />
+                    </button>
+                    <p className="overlay-hint">Click the button above to get started</p>
+                  </div>
+                </div>
+              )}
+              
               <div className="network-indicator">
                 <span className="network-dot"></span>
                 <span>Devnet</span>
@@ -274,7 +295,7 @@ function App() {
                   <span>Sell</span>
                   <span className="label-balance">Balance: {BALANCES[sellToken].toFixed(4)}</span>
                 </label>
-                <div className="token-input-container">
+                <div className={`token-input-container ${!isWalletConnected ? 'disabled' : ''}`}>
                   <div className="token-input-row">
                     <input
                       type="number"
@@ -284,7 +305,7 @@ function App() {
                       className="token-amount-input"
                       disabled={!isWalletConnected}
                     />
-                    <TokenSelector token={sellToken} onChange={setSellToken} exclude={buyToken} />
+                    <TokenSelector token={sellToken} onChange={setSellToken} exclude={buyToken} disabled={!isWalletConnected} />
                   </div>
                   <div className="token-info-row">
                     <span className="usd-value">≈ ${sellAmount ? (parseFloat(sellAmount) * 100).toFixed(2) : '0.00'}</span>
@@ -308,7 +329,7 @@ function App() {
                   <span>Buy</span>
                   <span className="label-balance">Balance: {BALANCES[buyToken].toFixed(4)}</span>
                 </label>
-                <div className="token-input-container">
+                <div className={`token-input-container ${!isWalletConnected ? 'disabled' : ''}`}>
                   <div className="token-input-row">
                     <input
                       type="number"
@@ -317,7 +338,7 @@ function App() {
                       placeholder="0.00"
                       className="token-amount-input"
                     />
-                    <TokenSelector token={buyToken} onChange={setBuyToken} exclude={sellToken} />
+                    <TokenSelector token={buyToken} onChange={setBuyToken} exclude={sellToken} disabled={!isWalletConnected} />
                   </div>
                   <div className="token-info-row">
                     <span className="usd-value">≈ ${buyAmount ? (parseFloat(buyAmount) * 1).toFixed(2) : '0.00'}</span>
@@ -373,7 +394,7 @@ function App() {
         </main>
 
         <footer className="footer">
-          <p>Powered by Hacka Swap • Demo Mode • Not for production use</p>
+          <p>Powered by Hackaton Swap • Demo Mode • Not for production use</p>
         </footer>
       </div>
     </>
@@ -390,7 +411,7 @@ const NavButton = ({ icon, label, url }) => {
   );
 };
 
-const TokenSelector = ({ token, onChange, exclude }) => {
+const TokenSelector = ({ token, onChange, exclude, disabled }) => {
   const [isOpen, setIsOpen] = useState(false);
   
   const tokenData = {
@@ -426,14 +447,14 @@ const TokenSelector = ({ token, onChange, exclude }) => {
   
   return (
     <div className="token-selector">
-      <button onClick={() => setIsOpen(!isOpen)} className="token-selector-button">
+      <button onClick={() => !disabled && setIsOpen(!isOpen)} className="token-selector-button" disabled={disabled}>
         <img src={currentToken.logo} alt={token} className="token-logo" onError={(e) => e.target.style.display = 'none'} />
         <span className="token-symbol">{token}</span>
         <ChevronDown size={16} className={`chevron ${isOpen ? 'open' : ''}`} />
         <div className="selector-glow"></div>
       </button>
       
-      {isOpen && (
+      {isOpen && !disabled && (
         <>
           <div className="dropdown-backdrop" onClick={() => setIsOpen(false)}></div>
           <div className="token-dropdown">
