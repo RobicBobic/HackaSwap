@@ -649,143 +649,57 @@
   z-index: 1;
 }
 
-/* WALLET CONNECTION OVERLAY - BIG, CLEAR, IMPOSSIBLE TO MISS! */
-.wallet-connect-overlay {
-  position: absolute;
-  inset: 0;
-  z-index: 999;
+/* Simple Wallet Alert Toast */
+.wallet-alert {
+  position: fixed;
+  top: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, rgba(95, 216, 149, 0.95), rgba(75, 200, 132, 0.95));
+  backdrop-filter: blur(20px);
+  border: 2px solid var(--primary);
+  border-radius: 16px;
+  padding: 20px 28px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  border-radius: 24px;
-  overflow: hidden;
+  gap: 14px;
+  z-index: 1000;
+  box-shadow: 0 8px 32px rgba(95, 216, 149, 0.4),
+              0 0 0 1px rgba(255, 255, 255, 0.1);
+  animation: slideDown 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 15px;
+  max-width: 90%;
 }
 
-.overlay-blur {
-  position: absolute;
-  inset: 0;
-  background: rgba(10, 15, 13, 0.98);
-  backdrop-filter: blur(20px);
-  z-index: 1;
-}
-
-.overlay-content {
-  position: relative;
-  z-index: 2;
-  text-align: center;
-  padding: 60px 40px;
-  max-width: 450px;
-  animation: slideUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-@keyframes slideUp {
+@keyframes slideDown {
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateX(-50%) translateY(-30px);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateX(-50%) translateY(0);
   }
 }
 
-.overlay-icon-container {
-  position: relative;
-  width: 100px;
-  height: 100px;
-  margin: 0 auto 30px;
-}
-
-.overlay-lock-icon {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  color: var(--text-secondary);
-  opacity: 0.3;
-  animation: pulse 3s ease-in-out infinite;
-}
-
-.overlay-wallet-icon {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  color: var(--primary);
-  animation: bounce 2s ease-in-out infinite;
-  filter: drop-shadow(0 0 20px rgba(95, 216, 149, 0.5));
-}
-
-.overlay-title {
-  font-size: 36px;
-  font-weight: 800;
-  color: var(--text-primary);
-  margin-bottom: 16px;
-  font-family: 'Space Grotesk', sans-serif;
-  letter-spacing: 1px;
-  background: linear-gradient(135deg, var(--primary) 0%, #ffffff 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.overlay-subtitle {
-  font-size: 16px;
-  color: var(--text-secondary);
-  margin-bottom: 32px;
-  line-height: 1.6;
-  font-weight: 500;
-}
-
-.overlay-connect-button {
-  padding: 18px 40px;
-  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+.alert-connect-btn {
+  padding: 8px 20px;
+  background: #ffffff;
   border: none;
-  border-radius: 14px;
-  color: #ffffff;
-  font-size: 18px;
+  border-radius: 8px;
+  color: var(--primary);
   font-weight: 700;
+  font-size: 14px;
   cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  transition: all 0.3s ease;
-  box-shadow: 0 8px 30px rgba(95, 216, 149, 0.4);
-  font-family: 'Inter', sans-serif;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  position: relative;
-  overflow: hidden;
+  transition: all 0.2s ease;
+  white-space: nowrap;
 }
 
-.overlay-connect-button::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.3) 100%);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.overlay-connect-button:hover::before {
-  opacity: 1;
-}
-
-.overlay-connect-button:hover {
-  transform: translateY(-3px) scale(1.05);
-  box-shadow: 0 12px 40px rgba(95, 216, 149, 0.6);
-}
-
-.overlay-connect-button:active {
-  transform: translateY(-1px) scale(1.02);
-}
-
-.overlay-hint {
-  margin-top: 20px;
-  font-size: 13px;
-  color: var(--text-secondary);
-  opacity: 0.7;
-  font-style: italic;
+.alert-connect-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 /* Network Indicator */
@@ -903,8 +817,14 @@
 }
 
 .token-input-container.disabled {
-  opacity: 0.5;
-  pointer-events: none;
+  opacity: 0.7;
+  cursor: pointer;
+}
+
+.token-input-container.disabled:hover {
+  opacity: 0.8;
+  border-color: rgba(95, 216, 149, 0.3);
+  background: rgba(10, 15, 13, 0.7);
 }
 
 .token-input-container:hover {
@@ -948,9 +868,9 @@
 }
 
 .token-amount-input:disabled {
-  opacity: 0.5;
+  opacity: 0.7;
   cursor: not-allowed;
-  pointer-events: none;
+  pointer-events: auto;
 }
 
 .token-info-row {

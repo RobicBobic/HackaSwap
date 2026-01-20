@@ -41,6 +41,7 @@ function App() {
   const [showSuccess, setShowSuccess] = useState(false);
   const [walletAddress, setWalletAddress] = useState('');
   const [particles, setParticles] = useState([]);
+  const [showWalletAlert, setShowWalletAlert] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -59,6 +60,15 @@ function App() {
     }));
     setParticles(newParticles);
   }, []);
+
+  useEffect(() => {
+    if (showWalletAlert) {
+      const timer = setTimeout(() => {
+        setShowWalletAlert(false);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [showWalletAlert]);
 
   useEffect(() => {
     if (sellAmount && parseFloat(sellAmount) > 0) {
@@ -126,6 +136,12 @@ function App() {
     const balance = BALANCES[sellToken] || 0;
     const maxAmount = sellToken === 'SOL' ? Math.max(0, balance - 0.01) : balance;
     setSellAmount(maxAmount.toString());
+  };
+
+  const handleInputClick = () => {
+    if (!isWalletConnected) {
+      setShowWalletAlert(true);
+    }
   };
 
   return (
@@ -251,24 +267,14 @@ function App() {
             <div className="swap-container">
               <div className="container-glow"></div>
               
-              {/* WALLET NOT CONNECTED OVERLAY - BIG AND CLEAR! */}
-              {!isWalletConnected && (
-                <div className="wallet-connect-overlay">
-                  <div className="overlay-blur"></div>
-                  <div className="overlay-content">
-                    <div className="overlay-icon-container">
-                      <Lock size={56} className="overlay-lock-icon" />
-                      <Wallet size={40} className="overlay-wallet-icon" />
-                    </div>
-                    <h3 className="overlay-title">Connect Wallet First</h3>
-                    <p className="overlay-subtitle">You need to connect your wallet before you can swap tokens</p>
-                    <button onClick={handleConnectWallet} className="overlay-connect-button">
-                      <Wallet size={20} />
-                      <span>Connect Wallet Now</span>
-                      <Sparkles size={18} />
-                    </button>
-                    <p className="overlay-hint">Click the button above to get started</p>
-                  </div>
+              {/* Simple Wallet Alert */}
+              {showWalletAlert && (
+                <div className="wallet-alert">
+                  <Wallet size={20} />
+                  <span>Please connect your wallet first to start swapping</span>
+                  <button onClick={handleConnectWallet} className="alert-connect-btn">
+                    Connect Now
+                  </button>
                 </div>
               )}
               
@@ -295,7 +301,7 @@ function App() {
                   <span>Sell</span>
                   <span className="label-balance">Balance: {BALANCES[sellToken].toFixed(4)}</span>
                 </label>
-                <div className={`token-input-container ${!isWalletConnected ? 'disabled' : ''}`}>
+                <div className={`token-input-container ${!isWalletConnected ? 'disabled' : ''}`} onClick={handleInputClick}>
                   <div className="token-input-row">
                     <input
                       type="number"
