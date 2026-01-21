@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Wallet, ChevronDown, ArrowUpDown, Github, Twitter, Zap, Database, CheckCircle, Sparkles, TrendingUp, Lock } from 'lucide-react';
+import { Wallet, ChevronDown, ArrowUpDown, Github, Twitter, Zap, Database, CheckCircle, Sparkles, TrendingUp } from 'lucide-react';
 import './App.css';
 
 // Move exchangeRates outside component to prevent re-creation on every render
